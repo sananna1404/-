@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Экономика предложения — Национальный проект РФ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #1F1F1F;
+      --bg-light: #E7E2D8;
+      --card-accent: #D8D3C9;
+      --card-accent-dark: #2B2B2B;
+      --text-dark: #111111;
+      --text-light: #FFFFFF;
+      --text-dim: #8E8E8E;
+      --line-light: rgba(0, 0, 0, 0.12);
+      --line-dark: rgba(255, 255, 255, 0.15);
+      --badge-red: #A83232;
+      --badge-green: #2E6B47;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: #121212;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .deck-container {
+      width: 100vw;
+      height: 56.25vw; /* 16:9 */
+      max-height: 100vh;
+      max-width: 177.78vh;
+      position: relative;
+      background: var(--bg-dark);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 4.2% 5.5%;
+      transition: opacity 0.25s ease-in-out;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    .slide-dark {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    .slide-light {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    h1, h2, h3, .metric-value, .brand-font {
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.05;
+    }
+
+    .meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85vw;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding-bottom: 1.2%;
+      border-bottom: 1px solid;
+    }
+
+    .slide-dark .meta-bar {
+      border-color: var(--line-dark);
+      color: var(--text-dim);
+    }
+
+    .slide-light .meta-bar {
+      border-color: var(--line-light);
+      color: #666;
+    }
+
+    .slide-header {
+      margin-top: 1.2%;
+      margin-bottom: 1.8%;
+    }
+
+    .slide-header .tag {
+      font-size: 0.8vw;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #777;
+      margin-bottom: 0.3%;
+    }
+
+    .slide-dark .slide-header .tag {
+      color: var(--text-dim);
+    }
+
+    .slide-header h2 {
+      font-size: 2.3vw;
+      font-weight: 700;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2%;
+      height: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8%;
+      height: 100%;
+    }
+
+    .grid-7 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1.3%;
+      height: 100%;
+    }
+
+    .card {
+      padding: 3.8% 4.2%;
+      background: var(--card-accent);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
+    }
+
+    .slide-dark .card {
+      background: var(--card-accent-dark);
+      border: 1px solid var(--line-dark);
+    }
+
+    .badge-num {
+      width: 2.2vw;
+      height: 2.2vw;
+      border-radius: 50%;
+      background: var(--text-dark);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1vw;
+      font-weight: 700;
+      margin-bottom: 3.5%;
+    }
+
+    .slide-dark .badge-num {
+      background: #FFF;
+      color: var(--text-dark);
+    }
+
+    .card-title {
+      font-size: 1.2vw;
+      font-weight: 700;
+      margin-bottom: 2.5%;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.5px;
+    }
+
+    .card-text {
+      font-size: 0.9vw;
+      line-height: 1.45;
+      color: #333;
+    }
+
+    .slide-dark .card-text {
+      color: #CCC;
+    }
+
+    .card-highlight {
+      margin-top: auto;
+      padding-top: 3%;
+      font-size: 0.8vw;
+      font-weight: 700;
+      color: #111;
+      border-top: 1px dashed rgba(0,0,0,0.15);
+    }
+
+    .slide-dark .card-highlight {
+      color: #FFF;
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .metric-value {
+      font-size: 3.6vw;
+      font-weight: 700;
+      line-height: 0.95;
+      margin-bottom: 1.5%;
+    }
+
+    .metric-sub {
+      font-size: 0.85vw;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #555;
+    }
+
+    .slide-dark .metric-sub {
+      color: var(--text-dim);
+    }
+
+    .hero-title {
+      font-size: 4.8vw;
+      line-height: 0.95;
+      font-weight: 700;
+      margin-bottom: 2%;
+    }
+
+    .hero-subtitle {
+      font-size: 1.4vw;
+      color: var(--text-dim);
+      max-width: 80%;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .hero-footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 2%;
+      border-top: 1px solid var(--line-dark);
+    }
+
+    .hero-col h4 {
+      font-size: 0.8vw;
+      color: var(--text-dim);
+      letter-spacing: 1.5px;
+      margin-bottom: 1%;
+    }
+
+    .hero-col p {
+      font-size: 1.05vw;
+      font-weight: 600;
+    }
+
+    /* Стили для слайда Плюсы / Минусы */
+    .pro-con-item {
+      margin-bottom: 3.5%;
+    }
+    .pro-con-item:last-child {
+      margin-bottom: 0;
+    }
+    .pro-con-item b {
+      display: block;
+      font-size: 0.95vw;
+      margin-bottom: 0.5%;
+      color: #111;
+    }
+    .pro-con-item p {
+      font-size: 0.86vw;
+      line-height: 1.4;
+      color: #444;
+    }
+
+    /* Навигация */
+    .nav-bar {
+      position: absolute;
+      bottom: 2%;
+      right: 3%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: rgba(0, 0, 0, 0.45);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 19px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-btn-circle {
+      width: 38px;
+      padding: 0;
+      border-radius: 50%;
+      font-size: 16px;
+    }
+
+    .nav-btn:hover {
+      background: #FFFFFF;
+      color: #111111;
+      border-color: #FFFFFF;
+    }
+
+    .slide-counter {
+      color: white;
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      letter-spacing: 1px;
+      min-width: 55px;
+      text-align: center;
+      background: rgba(0,0,0,0.5);
+      padding: 8px 12px;
+      border-radius: 19px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ===================================================
+       СТИЛИ ПЕЧАТИ / ЭКСПОРТА В PDF
+       =================================================== */
+    @page {
+      size: landscape;
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        background: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow: visible !important;
+      }
+
+      .deck-container {
+        width: 100vw !important;
+        height: auto !important;
+        max-width: none !important;
+        max-height: none !important;
+        box-shadow: none !important;
+        position: static !important;
+        overflow: visible !important;
+        background: transparent !important;
+      }
+
+      .nav-bar {
+        display: none !important;
+      }
+
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        min-height: 100vh !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        box-sizing: border-box !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="deck-container">
+
+  <!-- СЛАЙД 1: ОБЛОЖКА (DARK) -->
+  <div class="slide slide-dark active">
+    <div class="meta-bar">
+      <span>Минэкономразвития РФ</span>
+      <span>Стратегический горизонт 2025–2030</span>
+      <span>Разбор для 1 курса</span>
+    </div>
+
+    <div style="margin: auto 0;">
+      <h1 class="hero-title">ЭКОНОМИКА<br>ПРЕДЛОЖЕНИЯ</h1>
+      <p class="hero-subtitle">Как государство создает «тепличные условия», чтобы бизнесу было выгоднее строить заводы в России, чем хранить деньги на счетах.</p>
+    </div>
+
+    <div class="hero-footer">
+      <div class="hero-col">
+        <h4>ОСНОВА НАЦПРОЕКТА</h4>
+        <p>«Эффективная и конкурентная экономика»</p>
+      </div>
+      <div class="hero-col" style="text-align: right;">
+        <h4>СТРАТЕГИЧЕСКАЯ ЦЕЛЬ</h4>
+        <p>Темпы роста ВВП России выше среднемировых</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 2: ДЛЯ ЧЕГО? (LIGHT) -->
+  <div class="slide slide-light">
+    <div class="meta-bar">
+      <span>01. Для чего это нужно?</span>
+      <span>Проблема и новая логика</span>
+      <span>Контекст</span>
+    </div>
+
+    <div class="slide-header">
+      <div class="tag">ПОЧЕМУ СТАРАЯ МОДЕЛЬ БОЛЬШЕ НЕ РАБОТАЕТ?</div>
+      <h2>НЕ РАЗДУВАТЬ СПРОС, А СОЗДАВАТЬ ТОВАРЫ</h2>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 2%;">
+      <div class="card">
+        <div class="badge-num">A</div>
+        <div class="card-title">ТУПИК СПРОСА</div>
+        <p class="card-text">Раньше рост стимулировали дешевыми кредитами для населения. Сегодня наши заводы загружены почти на 90%, а свободных рабочих рук нет. Если просто раздавать деньги — товары быстро закончатся, а цены взлетят.</p>
+        <div class="card-highlight">ИТОГ: Инфляция вместо развития</div>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">B</div>
+        <div class="card-title">БАРЬЕР СТАВКИ 20%+</div>
+        <p class="card-text">Обычный кредит в банке стоит запретительно дорого (более 20% годовых). Ни один завод с циклом окупаемости в 10 лет не выдержит таких процентов. Бизнесу проще положить прибыль на банковский вклад.</p>
+        <div class="card-highlight">ИТОГ: Фабрики не строятся</div>
+      </div>
+
+      <div class="card" style="background: #CDC8BE;">
+        <div class="badge-num" style="background:#111; color:#FFF;">C</div>
+        <div class="card-title">ОТВЕТ НАЦПРОЕКТА</div>
+        <p class="card-text">Перейти к <b>экономике предложения</b>: помогать компаниям строить новые цеха, внедрять роботов и насыщать рынок товарами. Когда товаров много и они свои — инфляция замедляется естественным путем.</p>
+        <div class="card-highlight">РЕШЕНИЕ: Расширять выпуск товаров</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 3: ЧЕМ ЗАНИМАЕТСЯ? (LIGHT) -->
+  <div class="slide slide-light">
+    <div class="meta-bar">
+      <span>02. Чем занимается нацпроект?</span>
+      <span>Архитектура 2025–2030</span>
+      <span>7 направлений</span>
+    </div>
+
+    <div class="slide-header">
+      <div class="tag">ЕДИНАЯ ЭКОСИСТЕМА РАЗВИТИЯ</div>
+      <h2>7 ФЕДЕРАЛЬНЫХ ВЕКТОРОВ ПРОСТЫМИ СЛОВАМИ</h2>
+    </div>
+
+    <div class="grid-7" style="margin-bottom: 1.5%;">
+      <div class="card">
+        <div class="badge-num">01</div>
+        <div class="card-title">ИНВЕСТИЦИИ</div>
+        <p class="card-text">Помощь в покупке станков и стройке фабрик (+60% вложений к 2030).</p>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">02</div>
+        <div class="card-title">МАЛЫЙ БИЗНЕС</div>
+        <p class="card-text">Рост доходов сотрудников МСП в 1,2 раза быстрее роста ВВП страны.</p>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">03</div>
+        <div class="card-title">ПРОИЗВОДИТЕЛЬНОСТЬ</div>
+        <p class="card-text">Убираем простой. Выпуск на 20,7% больше теми же рабочими руками.</p>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">04</div>
+        <div class="card-title">СТАРТАПЫ</div>
+        <p class="card-text">Вузовские студии: превращаем дипломные изобретения в реальный бизнес.</p>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">05</div>
+        <div class="card-title">ФИНАНСОВЫЙ РЫНОК</div>
+        <p class="card-text">Привлекаем деньги граждан в акции и облигации (капитализация 66% ВВП).</p>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">06</div>
+        <div class="card-title">КОНКУРЕНЦИЯ</div>
+        <p class="card-text">Устранение барьеров и монополий: зеленый свет новым игрокам.</p>
+      </div>
+
+      <div class="card" style="grid-column: span 2;">
+        <div class="badge-num">07</div>
+        <div class="card-title">КЛИМАТ И МОДЕРНИЗАЦИЯ</div>
+        <p class="card-text">Оснащение производств современными фильтрами и зелеными стандартами без потерь для темпов выпуска.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 4: ТЕПЛИЧНЫЕ УСЛОВИЯ (ЧАСТЬ 1) (LIGHT) -->
+  <div class="slide slide-light">
+    <div class="meta-bar">
+      <span>03. Механика «теплицы» (Часть 1)</span>
+      <span>Снятие финансовых барьеров</span>
+      <span>Инструменты 1–3</span>
+    </div>
+
+    <div class="slide-header">
+      <div class="tag">КАК ГОСУДАРСТВО ПОДСТАВЛЯЕТ ПЛЕЧО</div>
+      <h2>ДЕНЬГИ, НАЛОГИ И СТАБИЛЬНЫЕ ПРАВИЛА</h2>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 2%;">
+      <div class="card">
+        <div class="badge-num">01</div>
+        <div class="card-title">«ДЕШЕВЫЕ» ДЕНЬГИ</div>
+        <p class="card-text"><b>Ситуация:</b> Кредит в банке стоит больше 20%. Ни один завод не окупится с такими процентами.<br><br><b>Действие государства:</b> <i>«Строй завод, твоя ставка будет 3–5% годовых, а остальную разницу банку мы доплатим из федерального бюджета»</i>.</p>
+        <div class="card-highlight">Ставка для инвестора: 3–5%</div>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">02</div>
+        <div class="card-title">ЗАМОРОЗКА ПРАВИЛ (СЗПК)</div>
+        <p class="card-text"><b>Ситуация:</b> Бизнес боится строить 10 лет, опасаясь, что налоги вырастут в два раза.<br><br><b>Действие государства:</b> Подписывает контракт: налоги, пошлины и законы замораживаются на 10–20 лет, а затраты на сети и дороги возмещают.</p>
+        <div class="card-highlight">Гарантия неизменности: до 20 лет</div>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">03</div>
+        <div class="card-title">СКИДКА НА НАЛОГ (ФИНВ)</div>
+        <p class="card-text"><b>Ситуация:</b> Прибыль проще забрать себе на дивиденды, чем купить новые станки.<br><br><b>Действие государства:</b> <i>«Потрать прибыль на покупку роботов или новый цех — и мы разрешим тебе не платить налог на прибыль на эту сумму»</i>.</p>
+        <div class="card-highlight">Инвестиционный налоговый вычет</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 5: ТЕПЛИЧНЫЕ УСЛОВИЯ (ЧАСТЬ 2) (LIGHT) -->
+  <div class="slide slide-light">
+    <div class="meta-bar">
+      <span>04. Механика «теплицы» (Часть 2)</span>
+      <span>Сбыт и инфраструктура</span>
+      <span>Инструменты 4–5 + Инвесткарта</span>
+    </div>
+
+    <div class="slide-header">
+      <div class="tag">ЗАЩИТА ОТ РИСКОВ И ПОИСК ПЛОЩАДКИ</div>
+      <h2>ГАРАНТИЯ СБЫТА И ГОТОВАЯ ЗЕМЛЯ</h2>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 2%;">
+      <div class="card">
+        <div class="badge-num">04</div>
+        <div class="card-title">ГАРАНТИРОВАННЫЙ КЛИЕНТ</div>
+        <p class="card-text"><b>Офсетный контракт:</b> Бизнес боится потратить миллиарды на выпуск сложных товаров (МРТ, лекарства) и не найти клиентов.<br><br><b>Решение:</b> Власти региона обязуются: <i>«Строй завод, и мы 10 лет гарантированно будем выкупать всю продукцию для наших больниц»</i>.</p>
+        <div class="card-highlight">100% гарантия сбыта</div>
+      </div>
+
+      <div class="card">
+        <div class="badge-num">05</div>
+        <div class="card-title">ЗАЩИТА БАНКОВ (ГОСГАРАНТИИ)</div>
+        <p class="card-text"><b>Фабрика ВЭБ.РФ:</b> Банк боится выдать 50 млрд ₽ на хай-тек проект (вдруг технология не сработает и деньги сгорят?).<br><br><b>Решение:</b> Государство говорит: <i>«Дайте кредит. Если завод прогорит, мы вернем вам деньги из казны»</i>. Риск исчезает.</p>
+        <div class="card-highlight">Государство как поручитель</div>
+      </div>
+
+      <div class="card" style="background: #CDC8BE;">
+        <div class="badge-num" style="background:#111; color:#fff;">MAP</div>
+        <div class="card-title">ИНВЕСТКАРТА РФ</div>
+        <p class="card-text"><b>«Авито» для заводов:</b> Портал <code>invest.economy.gov.ru</code>.<br><br>Вместо года переписки с чиновниками инвестор видит онлайн <b>15 000+ участков</b> по РФ, точки врезки газа, доступную электромощность и готовые налоговые льготы.</p>
+        <div class="card-highlight">Запуск завода в 2 раза быстрее</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 6: ПЛЮСЫ И МИНУСЫ (LIGHT) -->
+  <div class="slide slide-light">
+    <div class="meta-bar">
+      <span>05. Анализ эффектов</span>
+      <span>Две стороны одной медали</span>
+      <span>Экономический баланс</span>
+    </div>
+
+    <div class="slide-header">
+      <div class="tag">ОБЪЕКТИВНЫЙ ВЗГЛЯД НА «ТЕПЛИЧНЫЕ УСЛОВИЯ»</div>
+      <h2>ПЛЮСЫ И СКРЫТЫЕ РИСКИ ГОСПОДДЕРЖКИ</h2>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 2%;">
+      <!-- Плюсы -->
+      <div class="card" style="border-top: 4px solid var(--badge-green);">
+        <div class="card-title" style="color: var(--badge-green); display: flex; align-items: center; gap: 8px;">
+          <span>✓</span> ПОЧЕМУ ЭТО РАБОТАЕТ (ПЛЮСЫ)
+        </div>
+
+        <div class="pro-con-item">
+          <b>1. Преодоление шока ставки 20%+</b>
+          <p>При ключевой ставке ЦБ в районе 20% долгие инвестиции умирают первыми. Субсидия до 3–5% — единственный способ не заморозить развитие промышленности.</p>
+        </div>
+
+        <div class="pro-con-item">
+          <b>2. Ликвидация страха перед будущим</b>
+          <p>СЗПК и офсеты снимают главные риски бизнеса: налоги не вырастут 20 лет, а продукцию гарантированно купят школы, больницы или транспортные сети.</p>
+        </div>
+
+        <div class="pro-con-item">
+          <b>3. Разворот триллионов в реальный сектор</b>
+          <p>Корпоративные деньги не лежат мертвым грузом на вкладах и не уходят на дивиденды, а превращаются в реальные фабрики и станки.</p>
+        </div>
+
+        <div class="card-highlight" style="color: var(--badge-green);">
+          ГЛАВНЫЙ ЭФФЕКТ: Появление заводов здесь и сейчас
+        </div>
+      </div>
+
+      <!-- Минусы -->
+      <div class="card" style="border-top: 4px solid var(--badge-red);">
+        <div class="card-title" style="color: var(--badge-red); display: flex; align-items: center; gap: 8px;">
+          <span>✕</span> ОБРАТНАЯ СТОРОНА И РИСКИ (МИНУСЫ)
+        </div>
+
+        <div class="pro-con-item">
+          <b>1. Огромная нагрузка на госбюджет</b>
+          <p>Банки не прощают разницу в процентах: разрыв между 20% и 3% государство доплачивает живыми деньгами из бюджета за счет налогов граждан.</p>
+        </div>
+
+        <div class="pro-con-item">
+          <b>2. Синдром «избалованного» бизнеса (Moral Hazard)</b>
+          <p>Если государство гарантирует 100% сбыт и платит по долгам при банкротстве, у бизнеса падает стимул снижать себестоимость и повышать качество.</p>
+        </div>
+
+        <div class="pro-con-item">
+          <b>3. Искажение честной конкуренции</b>
+          <p>В «теплицу» попадают крупные игроки с административным ресурсом. Обычный малый бизнес остается наедине со ставкой 20%+ и налогами по полной.</p>
+        </div>
+
+        <div class="card-highlight" style="color: var(--badge-red);">
+          ГЛАВНЫЙ РИСК: Дороговизна для казны и потеря стимула к качеству
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 7: К ЧЕМУ ИДЕТ? (LIGHT) -->
+  <div class="slide slide-light">
+    <div class="meta-bar">
+      <span>06. К чему идет нацпроект?</span>
+      <span>Смысл и главная развилка</span>
+      <span>Ориентиры 2030</span>
+    </div>
+
+    <div class="slide-header">
+      <div class="tag">ГЛАВНАЯ ДИЛЕММА БИЗНЕСА</div>
+      <h2>ПОСТРОИТЬ ЗАВОД ДОЛЖНО БЫТЬ ВЫГОДНЕЕ, ЧЕМ ДЕРЖАТЬ ДЕНЬГИ В БАНКЕ</h2>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 2%;">
+      <div class="card" style="justify-content: space-between;">
+        <div>
+          <div class="card-title" style="font-size: 1.4vw; margin-bottom: 3.5%;">СУТЬ «ТЕПЛИЧНЫХ УСЛОВИЙ»</div>
+          <p class="card-text" style="font-size: 1.02vw; line-height: 1.6;">
+            У любого владельца капитала сегодня есть выбор:
+            <br><b>1. Простой путь:</b> положить миллиард рублей на депозит под 20% и ничего не делать.
+            <br><b>2. Сложный путь:</b> рискнуть, нанять людей и построить завод микроэлектроники или фармы.
+            <br><br>
+            Государство сознательно идет на издержки «теплицы», чтобы <b>перевесить чашу весов</b> в пользу созидания. Строить внутри страны должно стать выгоднее, чем копить.
+          </p>
+        </div>
+        <div class="card-highlight" style="font-size: 0.88vw;">ЦЕЛЬ: Развернуть частные триллионы рублей в реальные активы</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 4%;">
+        <div class="card" style="padding: 4.5%;">
+          <div class="metric-value">+60%</div>
+          <div class="metric-sub">Рост реальных инвестиций в основной капитал к 2030</div>
+        </div>
+
+        <div class="card" style="padding: 4.5%;">
+          <div class="metric-value">2X</div>
+          <div class="metric-sub">Удвоение фонда развития промышленности (ФРП)</div>
+        </div>
+
+        <div class="card" style="padding: 4.5%;">
+          <div class="metric-value">> МИРОВОГО</div>
+          <div class="metric-sub">Целевой темп ежегодного роста ВВП России</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 8: ЧТО ЭТО ДАЕТ? (DARK) -->
+  <div class="slide slide-dark">
+    <div class="meta-bar">
+      <span>07. Что это дает?</span>
+      <span>Финальный баланс интересов</span>
+      <span>Результат к 2030</span>
+    </div>
+
+    <div class="slide-header">
+      <div class="tag">СИНЕРГИЯ ДЛЯ ВСЕХ УЧАСТНИКОВ</div>
+      <h2>ЧТО НАЦПРОЕКТ ДАЕТ СТРАНЕ, БИЗНЕСУ И СТУДЕНТАМ</h2>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 2%;">
+      <div class="card">
+        <div class="card-title" style="color: #FFF;">СТУДЕНТАМ И ГРАЖДАНАМ</div>
+        <p class="card-text">
+          • <b>Высокие зарплаты:</b> современные заводы с роботами требуют квалифицированных инженеров и аналитиков.<br><br>
+          • <b>Свои качественные товары:</b> свои лекарства, техника и самолеты без страха внезапного дефицита.<br><br>
+          • <b>Карьерный лифт:</b> поддержка вузовских стартап-студий и венчурные гранты.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color: #FFF;">ПРЕДПРИЯТИЯМ И БИЗНЕСУ</div>
+        <p class="card-text">
+          • <b>Кредиты под 3–5%</b> вместо запретительных рыночных ставок.<br><br>
+          • <b>Стабильность на 20 лет:</b> защита от внезапного повышения налогов.<br><br>
+          • <b>Гарантированный сбыт:</b> государство выкупает сложные товары по долгосрочным офсетам.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color: #FFF;">ГОСУДАРСТВУ И РЕГИОНАМ</div>
+        <p class="card-text">
+          • <b>Технологический суверенитет:</b> критические отрасли независимы от внешних санкций.<br><br>
+          • <b>Налоги в бюджет:</b> работающие предприятия финансируют социальную сферу.<br><br>
+          • <b>Устойчивый рост:</b> экономика опирается на физическое производство, а не только на сырье.
+        </p>
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--line-dark); padding-top: 1.8%; display: flex; justify-content: space-between; align-items: flex-end;">
+      <div>
+        <h3 style="font-size: 1.5vw; letter-spacing: 0.5px;">ЭКОНОМИКА ПРЕДЛОЖЕНИЯ — ЭТО КОГДА ВЫГОДНО СОЗИДАТЬ.</h3>
+        <p style="font-size: 0.9vw; color: var(--text-dim); margin-top: 0.4%;">Спасибо за внимание! Вопросы и открытое обсуждение.</p>
+      </div>
+      <div style="font-size: 0.85vw; color: var(--text-dim); text-align: right;">
+        Минэкономразвития РФ | 2026 г.
+      </div>
+    </div>
+  </div>
+
+  <!-- Кнопки навигации и экспорт в PDF -->
+  <div class="nav-bar">
+    <button class="nav-btn" id="pdfBtn" title="Экспортировать всю презентацию в PDF">
+      <span>📄</span> ЭКСПОРТ В PDF
+    </button>
+    <button class="nav-btn nav-btn-circle" id="prevBtn" title="Предыдущий слайд (←)">&#8592;</button>
+    <div class="slide-counter" id="slideNum">01 / 08</div>
+    <button class="nav-btn nav-btn-circle" id="nextBtn" title="Следующий слайд (→)">&#8594;</button>
+  </div>
+
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const slideNumDisplay = document.getElementById('slideNum');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const pdfBtn = document.getElementById('pdfBtn');
+  let currentSlide = 0;
+
+  function updateSlide(index) {
+    slides.forEach((s, idx) => {
+      s.classList.toggle('active', idx === index);
+    });
+    slideNumDisplay.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+  }
+
+  function nextSlide() {
+    if (currentSlide < slides.length - 1) {
+      currentSlide++;
+      updateSlide(currentSlide);
+    }
+  }
+
+  function prevSlide() {
+    if (currentSlide > 0) {
+      currentSlide--;
+      updateSlide(currentSlide);
+    }
+  }
+
+  nextBtn.addEventListener('click', nextSlide);
+  prevBtn.addEventListener('click', prevSlide);
+
+  // Обработчик экспорта в PDF
+  pdfBtn.addEventListener('click', () => {
+    window.print();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'Space') {
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      prevSlide();
+    } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+      // Стандартный Ctrl+P / Cmd+P также экспортирует презентацию
+      e.preventDefault();
+      window.print();
+    }
+  });
+</script>
+
+</body>
+</html>
